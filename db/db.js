@@ -1,6 +1,6 @@
-const e = require("express");
+const { v4: uuidv4 } = require('uuid');
 
-const USERS= [
+let USERS= [
 
 ]
 
@@ -11,7 +11,7 @@ const createUser=(userData)=>{
     }
  
     // Generate a Id for the user 
-   
+   userData.id = uuidv4()
     USERS.push(userData)
  
    return  true
@@ -28,8 +28,26 @@ const getUserByUserName=(username)=>{
 
 }
 
+const getUserbyId=(id)=>{
+    return USERS.find(ele=>ele.id==id);
+
+
+}
+
+const updateUserbyIdDb=(id,data)=>{
+    let filteredAt= USERS.filter(ele=>ele.id!=id);
+    data.id=id
+    filteredAt.push(data);
+    USERS=[...filteredAt]
+   return true
+
+
+}
+
 module.exports={
     createUser,
     getAllUsers,
-    getUserByUserName
+    getUserByUserName,
+    getUserbyId,
+    updateUserbyIdDb
 }

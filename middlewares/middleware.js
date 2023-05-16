@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const {getUserByUserName}= require("../db/db")
+const  jwt = require('jsonwebtoken');
 
 const errorMiddleWare=(err,req,res,next)=>{
 res.json({
@@ -36,8 +37,36 @@ const checkPassword=(req,res,next)=>{
    }
 }
 
+const checkAuthorization =(req,res,next)=>{
+    const authorizationToken = req.headers.authorization;
+    if(authorizationToken){
+
+        try {
+            jwt.verify(authorizationToken, process.env.JWTKEY);
+   
+               next();
+             } catch(err) {
+             
+               res.status(401).json({
+                   status:"Failed",
+                   message:"Token Malformed..."
+               })
+               
+             }
+
+    }else{
+        res.status(401).json({
+            status:"FAILED",
+            message:"Authorization required"
+        })
+    }
+    next();
+
+}
+
 module.exports={
     errorMiddleWare,
     encryptPassword,
-    checkPassword
+    checkPassword,
+    checkAuthorization
 }
