@@ -1,6 +1,6 @@
 const express =require('express');
 const router = express.Router();
-const {fileUpload} =require('../controllers/fileUploadController')
+const {fileUpload,getUploads} =require('../controllers/fileUploadController')
 const path = require("path");
 const multipart = require('connect-multiparty');
 const  multipartMiddleware = multipart({ uploadDir:`${path.join(__dirname,"../uploads")}` });
@@ -8,6 +8,8 @@ const  multipartMiddleware = multipart({ uploadDir:`${path.join(__dirname,"../up
 
 
 router.post("/",multipartMiddleware, fileUpload)
+router.get("/get",getUploads)
+
 
 
 
